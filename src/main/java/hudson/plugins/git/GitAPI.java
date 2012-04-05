@@ -770,12 +770,13 @@ public class GitAPI implements IGitAPI {
             String result = fos.toString();
             
             // JENKINS-13356: do not return the output of stderr, but at least print it somewhere
-            if (err.size() > 0) {
-                listener.getLogger().print("Command \""+StringUtils.join(args.toCommandArray(), " ")+"printed on stderr: "+err.toString());
-            }
+            // (disabled again, creates too much unwanted output, for example when cloning a repository)
+//            if (err.size() > 0) {
+//                listener.getLogger().print("Command \""+StringUtils.join(args.toCommandArray(), " ")+"printed on stderr: "+err.toString());
+//            }
 
             if (status != 0) {
-                throw new GitException("Command \""+StringUtils.join(args.toCommandArray(), " ")+"\" returned status code " + status + ": " + result + err.toString());
+                throw new GitException("Command \""+StringUtils.join(args.toCommandArray(), " ")+"\" returned status code " + status + ":\nstdout: " + result + "\nstderr: "+ err.toString());
             }
 
             return result;
