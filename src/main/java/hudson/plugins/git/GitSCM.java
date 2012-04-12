@@ -683,6 +683,7 @@ public class GitSCM extends SCM implements Serializable {
             String gitRepo = getParamExpandedRepos(lastBuild).get(0).getURIs().get(0).toString();
             String headRevision = git.getHeadRev(gitRepo, getBranches().get(0).getName());
 
+            listener.getLogger().println("[poll] Latest remote Revision: " + headRevision);
             if(buildData.lastBuild.getRevision().getSha1String().equals(headRevision)) {
                 return PollingResult.NO_CHANGES;
             } else {
@@ -719,6 +720,7 @@ public class GitSCM extends SCM implements Serializable {
         
         // JENKINS-10880: workingDirectory can be null
         if (workingDirectory == null || !workingDirectory.exists()) {
+            listener.getLogger().println("No working directory found, forcing build.");
             return PollingResult.BUILD_NOW;
         }
 
